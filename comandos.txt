@@ -1,0 +1,8 @@
+use blog;
+
+-- SELECT e.title, c.name FROM entries e, categories c WHERE
+-- e.id=1 AND c.id=e.id;
+
+-- select id from entry_tag where entry_id = 1
+
+select t.name from tags t where t.id in(select id from entry_tag where entry_id = 1) ORDER BY id DESC;
