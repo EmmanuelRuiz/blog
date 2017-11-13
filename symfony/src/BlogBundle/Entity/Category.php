@@ -22,6 +22,11 @@ class Category
      */
     private $description;
 
+    protected $entry;
+    
+    public function __construct() {
+        $this->entry = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -79,6 +84,10 @@ class Category
     public function getDescription()
     {
         return $this->description;
+    }
+    
+    public function getEntries(){
+        return $this->entry;
     }
 }
 

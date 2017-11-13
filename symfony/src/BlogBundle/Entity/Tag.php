@@ -22,6 +22,11 @@ class Tag
      */
     private $description;
 
+    protected $entryTag;
+    
+    public function __construct() {
+        $this->entryTag = new \Doctrine\Tests\Common\Collections\ArrayCollectionTest();
+    }
 
     /**
      * Get id
@@ -79,6 +84,10 @@ class Tag
     public function getDescription()
     {
         return $this->description;
+    }
+    
+    public function getEntryTag(){
+        return $this->entryTag;
     }
 }
 

@@ -33,7 +33,7 @@ BlogBundle\Entity\EntryTag:
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: null
+            inversedBy: entryTag
             joinColumns:
                 tag_id:
                     referencedColumnName: id

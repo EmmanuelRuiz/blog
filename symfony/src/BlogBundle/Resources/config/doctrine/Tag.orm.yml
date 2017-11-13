@@ -23,4 +23,9 @@ BlogBundle\Entity\Tag:
             length: 65535
             options:
                 fixed: false
+    oneToMany:
+        entryTag:
+            targetEntity: EntryTag
+            mappedBy: tag
+            cascade: ["persist"]
     lifecycleCallbacks: {  }
