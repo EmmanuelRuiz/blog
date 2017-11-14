@@ -3,20 +3,20 @@
     <head>
         <meta charset="utf-8">
         <title> {% block title %} Blog | CreaLab {% endblock %} </title>
-        
+
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css')}}">
-        
-        
+
+
         {% block javascripts %}
-        <script src="{{ asset('assets/js/jquery.min.js')}}"></script>
-        <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
+            <script src="{{ asset('assets/js/jquery.min.js')}}"></script>
+            <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
         {% endblock %}
-        
+
     </head>
     <body>
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">CreaLab</a>
+                <a class="navbar-brand" href="{{path('blog_homepage')}}">CreaLab</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -26,12 +26,29 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
                         </li>
+
+                        {% if app.user == null %}
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('login') }}">login</a>
+                            </li>
+
+                        {% else %}
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('logout') }}">Salir</a>
+                            </li>
+                        {% endif %}
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Dropdown
+                                
+                                {% if app.user != null %}
+                                    <p>Bienvenido {{app.user.name}} {{app.user.surname}}
+                                {% endif %}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="#">Action</a>
