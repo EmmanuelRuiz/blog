@@ -4,11 +4,16 @@ namespace BlogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use BlogBundle\Entity\User;
 use BlogBundle\Form\UserType;
 
 class UserController extends Controller
 {
+    private $session;
+    public function __construct() {
+        $this->session = new Session();
+    }
     //login
     public function loginAction(Request $request){
         $authenticationUtils = $this->get("security.authentication_utils");
@@ -18,7 +23,8 @@ class UserController extends Controller
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-        if($form->isValid()){
+        if ($form->isSubmitted()) {
+            if($form->isValid()){
             $user = new User();
             $user->setName($form->get("name")->getData());
             $user->setSurname($form->get("surname")->getData());
@@ -38,6 +44,10 @@ class UserController extends Controller
         } else {
             $stauts = "No se pudo registrar el usuario";
         }
+        $this->session->getFlashBag()->add("status", $status);
+        }
+        
+        
         
         
         return $this->render("BlogBundle:user:login.html.twig", array(

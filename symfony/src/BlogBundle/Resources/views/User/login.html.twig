@@ -33,6 +33,11 @@
            
     <div class="col-lg-6">
         <h2>Registrate</h2>
+        {% for message in app.session.flashbag().get('status') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor%}
         {{ form_start(form, {'action':'', 'method':'POST'}) }}
             {{ form_errors(form) }}
             {{ form_widget(form) }}
