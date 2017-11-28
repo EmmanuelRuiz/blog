@@ -25,7 +25,10 @@ class UserController extends Controller {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+        $status_error = null;
+            $status = null;
         if ($form->isSubmitted()) {
+            
             if ($form->isValid()) {
                 //validar que no se repita el usuario
                 $em = $this->getDoctrine()->getManager();
@@ -52,24 +55,31 @@ class UserController extends Controller {
                     if ($flush == null) {
                         $status = "Usuario creado correctamente";
                     } else {
-                        $status = "No se pudo crear el usuario";
+                        $status_error = "No se pudo crear el usuario";
                     }
                 } else {
-                    $status = "el usuario ya existe";
+                    $status_error = "El usuario ya existe";
                 }
             } else {
-                $stauts = "No se pudo registrar el usuario";
+                $status_error = "No se pudo registrar el usuario";
             }
-            $this->session->getFlashBag()->add("status", $status);
+            if($status != null){
+                $this->session->getFlashBag()->add("status", $status);
+            } else if ($status_error != null) {
+                $this->session->getFlashBag()->add("status", $status_error);
+            }
+            
         }
 
 
 
 
         return $this->render("BlogBundle:user:login.html.twig", array(
-                    "error" => $error,
-                    "last_username" => $lastUsername,
-                    "form" => $form->createView()
+            "error" => $error,
+            "last_username" => $lastUsername,
+            "form" => $form->createView(),
+            "status" => $status,
+            "status_error" => $status_error
         ));
     }
 

@@ -16,7 +16,7 @@
     {% endif %}
 
 
-    <div class="col-lg-6">
+    <div class="col-xs-12 col-lg-6">
         <h2>Login</h2>
 
         <form action="{{path("login_check")}}" method="post">
@@ -31,13 +31,24 @@
         </form>
     </div>
            
-    <div class="col-lg-6">
+    <div class="col-xs-12 col-lg-6">
         <h2>Registrate</h2>
-        {% for message in app.session.flashbag().get('status') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor%}
+        
+        {% if status != null %}
+            {% for message in app.session.flashbag().get('status') %}
+                <div class="alert alert-success">
+                    <div class="text-center">{{ message }}</div>
+                </div>
+            {% endfor%}
+        {% elseif status_error != null %}
+            {% for message in app.session.flashbag().get('status') %}
+                <div class="alert alert-danger">
+                    <div class="text-center">{{ message }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+    
         {{ form_start(form, {'action':'', 'method':'POST'}) }}
             {{ form_errors(form) }}
             {{ form_widget(form) }}
