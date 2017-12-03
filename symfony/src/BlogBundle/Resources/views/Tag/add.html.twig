@@ -1,4 +1,16 @@
-<h2>Añadir tags</h2>
-{{ form_start(form) }}
+{% extends "BlogBundle::layout.html.twig" %}
+{% block content %}
+    
+    <div class="col-lg-6">
+    <h2>Añadir tags</h2>
+    
+        {% for message in app.session.flashbag().get('status') %}
+            <div class="alert alert-success"> {{ message }} </div>
+        {% endfor %}
+        {{ form_start(form) }}
 
-{{ form_end(form) }}
+        {{ form_end(form) }}
+    </div>
+    <div class="clearfix"></div>
+
+{% endblock %}

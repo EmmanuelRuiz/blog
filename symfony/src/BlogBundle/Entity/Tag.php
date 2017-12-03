@@ -1,7 +1,7 @@
 <?php
 
 namespace BlogBundle\Entity;
-
+use Doctrine\Tests\Common\Collections\ArrayCollectionTest;
 /**
  * Tag
  */
@@ -25,7 +25,7 @@ class Tag
     protected $entryTag;
     
     public function __construct() {
-        $this->entryTag = new \Doctrine\Tests\Common\Collections\ArrayCollectionTest();
+        $this->entryTag = new ArrayCollectionTest();
     }
 
     /**

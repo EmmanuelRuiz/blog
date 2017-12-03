@@ -19,7 +19,20 @@ class TagController extends Controller {
 
     public function addAction(Request $request){
         $tag = new Tag();
-        $this->createForm(TagType::class, $tag);
+        $form = $this->createForm(TagType::class, $tag);
+        
+        /*recoger lo que llega del form*/
+        $form->handleRequest($request);
+        if($form->isSubmitted()){
+            if($form->isValid()){
+                $status = "la etiqueta se ha creado correctamente";
+            }  else {
+                $status = "la etiqueta no se ha creado, el form no es valido";
+            }
+            /*crear flag*/
+        $this->session->getFlashBag()->add("status", $status);
+        }
+        
         
         
         return $this->render("BlogBundle:Tag:add.html.twig", array(
