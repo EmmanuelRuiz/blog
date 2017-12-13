@@ -3,10 +3,28 @@
 {% block content %}
     <div class="col-lg-6">
         <h2>Todas las etiquetas</h2>
-        
-        {% for tag in tags %}
-            {{ tag.name }} <hr>
+        <hr>
+
+        <a href="{{path('blog_add_tag')}}" class="btn btn-success">Añadir Etiqueta</a>
+        <hr>
+        {% for message in app.session.flashbag().get('status') %}
+            <div class="alert alert-success"> {{ message }} </div>
         {% endfor %}
+        <table class="table table-bordered">
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+            </tr>
+            {% for tag in tags %}
+
+                <tr>
+                    <td>{{ tag.name }}</td>
+                    <td>{{ tag.description }} </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
     </div>
-        <div class="clearfix"></div>
+    <div class="clearfix"></div>
 {% endblock %}

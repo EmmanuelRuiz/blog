@@ -4,9 +4,6 @@
     <div class="col-lg-6">
     <h2>Añadir tags</h2>
     
-        {% for message in app.session.flashbag().get('status') %}
-            <div class="alert alert-success"> {{ message }} </div>
-        {% endfor %}
         {{ form_start(form) }}
 
         {{ form_end(form) }}

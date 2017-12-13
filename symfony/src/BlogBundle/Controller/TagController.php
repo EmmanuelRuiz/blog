@@ -46,9 +46,10 @@ class TagController extends Controller {
                 $em->persist($tag);
                 $flush = $em->flush();
                 if ($flush == null) {
-                    $status = "error al añadir la etiqueta";
-                } else {
                     $status = "la etiqueta se ha creado correctamente";
+                    
+                } else {
+                    $status = "error al añadir la etiqueta";
                 }
                 
             }  else {
