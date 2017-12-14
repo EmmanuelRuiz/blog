@@ -34,4 +34,8 @@ blog_index_category:
 
 blog_delete_category:
     path: /categories/delete/{id}
-    defaults: { _controller: BlogBundle:categories:delete }
+    defaults: { _controller: BlogBundle:Category:delete }
+
+blog_edit_category:
+    path: /categories/edit/{id}
+    defaults: { _controller: BlogBundle:Category:edit }

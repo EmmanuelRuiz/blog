@@ -14,6 +14,7 @@
             <tr>
                 <th>Nombre</th>
                 <th>Descripción</th>
+                <th>Editar</th>
                 <th>Eliminar</th>
             </tr>
             {% for category in categories %}
@@ -21,6 +22,7 @@
                 <tr>
                     <td>{{ category.name }}</td>
                     <td>{{ category.description }} </td>
+                    <td><a href="{{ path('blog_edit_category', {"id":category.id}) }}" class="btn btn-warning">Editar</a></td>
                     <td>
                         {% if category.entries|length == 0 %}
                             <a href="{{ path('blog_delete_category', {"id":category.id}) }}" class="btn btn-danger">Eliminar</a>

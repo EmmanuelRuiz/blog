@@ -73,5 +73,37 @@ class CategoryController extends Controller {
         }
         return $this->redirectToRoute("blog_index_category");
     }
+    
+    public function editAction(Request $request, $id){
+        $em = $this->getDoctrine()->getManager();
+        $category_repo = $em->getRepository("BlogBundle:Category");
+        $category= $category_repo->find($id);
+        
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                 $category->setName($form->get("name")->getData());
+                $category->setDescription($form->get("description")->getData());
+                $em->persist($category);
+                $flush = $em->flush();
+                if ($flush == null) {
+                    $status = "la categoria se ha editado correctamente";
+                } else {
+                    $status = "error al editar la categoría";
+                }
+            } else {
+                $status = "la categoría no se ha editado, el form no es valido";
+            }
+            /* crear flag */
+            $this->session->getFlashBag()->add("status", $status);
+            return $this->redirectToRoute("blog_index_category");
+        }
 
+        
+        
+        return $this->render("BlogBundle:Category:edit.html.twig", array(
+            "form" => $form->createView()
+        ));
+    }
 }
