@@ -23,3 +23,15 @@ blog_index_tag:
 blog_delete_tag:
     path: /tags/delete/{id}
     defaults: { _controller: BlogBundle:Tag:delete }
+
+blog_add_category:
+    path: /categories/add
+    defaults: { _controller: BlogBundle:Category:add }
+
+blog_index_category:
+    path: /categories
+    defaults: { _controller: BlogBundle:Category:index }
+
+blog_delete_category:
+    path: /categories/delete/{id}
+    defaults: { _controller: BlogBundle:categories:delete }
