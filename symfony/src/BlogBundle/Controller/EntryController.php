@@ -24,23 +24,35 @@ class EntryController extends Controller {
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-//                $em = $this->getDoctrine()->getManager();
-//                $category = new Category();
-//                $category->setName($form->get("name")->getData());
-//                $category->setDescription($form->get("description")->getData());
-//                $em->persist($category);
-//                $flush = $em->flush();
-//                if ($flush == null) {
-//                    $status = "la categoria se ha creado correctamente";
-//                } else {
-//                    $status = "error al añadir la categoría";
-//                }
+                $em = $this->getDoctrine()->getManager();
+                //repositorio para juntar la id del select
+                //con la id de la categoria de la bd
+                $category_repo = $em->getRepository("BlogBundle:Category");
+                //objeto entry para guardar datos
+                $entry = new Entry();
+                $entry->setTitle($form->get("title")->getData());
+                $entry->setContent($form->get("content")->getData());
+                $entry->setStatus($form->get("status")->getData());
+                $entry->setImage(null);
+
+                $category = $category_repo->find($form->get("category")->getData());
+                $entry->setCategory($category);
+                
+                $user = $this->getUser();
+                $entry->setUser($user);
+                $em->persist($entry);
+                $flush = $em->flush();
+                if ($flush == null) {
+                    $status = "la categoria se ha creado correctamente";
+                } else {
+                    $status = "error al añadir la categoría";
+                }
             } else {
                 $status = "la categoría no se ha creado, el form no es valido";
             }
             /* crear flag */
-            //     $this->session->getFlashBag()->add("status", $status);
-            //   return $this->redirectToRoute("blog_index_category");
+            $this->session->getFlashBag()->add("status", $status);
+            //return $this->redirectToRoute("blog_index_entry");
         }
         return $this->render("BlogBundle:Entry:add.html.twig", array(
                     "form" => $form->createView()

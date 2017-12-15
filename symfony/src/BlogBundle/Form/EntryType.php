@@ -36,8 +36,8 @@ class EntryType extends AbstractType
                 ->add('status', ChoiceType::class, array(
                     "label" => "Estado",
                     "choices" => array(
-                        "public" => "Publico",
-                        "private" => "Privado"
+                        "Publico" => "public",
+                        "Privado" => "privado"
                     ),
                     "attr" => array(
                         "class" => "form-control"
@@ -54,6 +54,7 @@ class EntryType extends AbstractType
                 //rellenar el select 
                 ->add('category', EntityType::class, array(
                     "class" => "BlogBundle:Category",
+                    "label" => "Categoría",
                     "attr" => array(
                         "class" => "form-control"
                     )
