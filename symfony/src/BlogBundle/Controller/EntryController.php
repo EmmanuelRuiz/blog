@@ -25,8 +25,12 @@ class EntryController extends Controller {
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
+                
+                //entry_repo es para poder mandar a llamar a entryRepository
+                $entry_repo = $em->getRepository("BlogBundle:Entry");
                 //repositorio para juntar la id del select
                 //con la id de la categoria de la bd
+                
                 $category_repo = $em->getRepository("BlogBundle:Category");
                 //objeto entry para guardar datos
                 $entry = new Entry();
@@ -49,6 +53,17 @@ class EntryController extends Controller {
                 $entry->setUser($user);
                 $em->persist($entry);
                 $flush = $em->flush();
+                
+                //llamar entryRepository
+                //le pasamos lo que acabamos de guardar del formulario
+                //(las tags, el titulo, el usuario, la categoria)
+                $entry_repo->saveEntryTags(
+                        $form->get("tags")->getData(),
+                        $form->get("title")->getData(),
+                        $category,                   
+                        $user
+                    );
+                
                 if ($flush == null) {
                     $status = "la categoria se ha creado correctamente";
                 } else {
