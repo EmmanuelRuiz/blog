@@ -15,19 +15,19 @@ class EntryController extends Controller {
     public function __construct() {
         $this->session = new Session();
     }
-    
-    public function indexAction(Request $request){
+
+    public function indexAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $entry_repo = $em->getRepository("BlogBundle:Entry");
-        
-        $category_repo = $em->getRepository("BlogBundle:Category");              
-        
+
+        $category_repo = $em->getRepository("BlogBundle:Category");
+
         $entries = $entry_repo->findAll();
         $categories = $category_repo->findAll();
-        
-        return $this->render("BlogBundle:Entry:index.html.twig",array(
-            "entries" => $entries,
-            "categories" => $categories
+
+        return $this->render("BlogBundle:Entry:index.html.twig", array(
+                    "entries" => $entries,
+                    "categories" => $categories
         ));
     }
 
@@ -40,45 +40,42 @@ class EntryController extends Controller {
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
-                
+
                 //entry_repo es para poder mandar a llamar a entryRepository
                 $entry_repo = $em->getRepository("BlogBundle:Entry");
                 //repositorio para juntar la id del select
                 //con la id de la categoria de la bd
-                
+
                 $category_repo = $em->getRepository("BlogBundle:Category");
                 //objeto entry para guardar datos
                 $entry = new Entry();
                 $entry->setTitle($form->get("title")->getData());
                 $entry->setContent($form->get("content")->getData());
                 $entry->setStatus($form->get("status")->getData());
-                
+
                 $file = $form["image"]->getData();
                 $ext = $file->guessExtension();
-                $file_name = time().".".$ext;
-                $file->move("uploads",$file_name);
-                
-                
+                $file_name = time() . "." . $ext;
+                $file->move("uploads", $file_name);
+
+
                 $entry->setImage($file_name);
 
                 $category = $category_repo->find($form->get("category")->getData());
                 $entry->setCategory($category);
-                
+
                 $user = $this->getUser();
                 $entry->setUser($user);
                 $em->persist($entry);
                 $flush = $em->flush();
-                
+
                 //llamar entryRepository
                 //le pasamos lo que acabamos de guardar del formulario
                 //(las tags, el titulo, el usuario, la categoria)
                 $entry_repo->saveEntryTags(
-                        $form->get("tags")->getData(),
-                        $form->get("title")->getData(),
-                        $category,                   
-                        $user
-                    );
-                
+                        $form->get("tags")->getData(), $form->get("title")->getData(), $category, $user
+                );
+
                 if ($flush == null) {
                     $status = "la categoria se ha creado correctamente";
                 } else {
@@ -94,6 +91,31 @@ class EntryController extends Controller {
         return $this->render("BlogBundle:Entry:add.html.twig", array(
                     "form" => $form->createView()
         ));
+    }
+
+    public function deleteAction($id) {
+        $em = $this->getDoctrine()->getManager();
+        $entry_repo = $em->getRepository("BlogBundle:Entry");
+        /* para poder eliminar entradas que tengan tags asociadas */
+        $entry_tag_repo = $em->getRepository("BlogBundle:EntryTag");
+        //hacemos find a entrytag
+        $entry = $entry_repo->find($id);
+
+
+        $entry_tags = $entry_tag_repo->findBy(array("entry" => $entry));
+        //recorremos el resultado
+        foreach ($entry_tags as $et) {
+            if (is_object($et)) {
+                $em->remove($et);
+                $em->flush();
+            }
+        }
+        if (is_object($entry)) {
+            $em->remove($entry);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute("blog_homepage");
     }
 
 }

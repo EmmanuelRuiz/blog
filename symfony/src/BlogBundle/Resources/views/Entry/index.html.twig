@@ -1,28 +1,32 @@
 {% extends "BlogBundle::layout.html.twig" %}
 {% block menu %}
-   {% include "BlogBundle:Category:menu.categories.html.twig" with {'categories':categories} %} 
+    {% include "BlogBundle:Category:menu.categories.html.twig" with {'categories':categories} %} 
 {% endblock %}
 
 {% block content %}
     {% for message in app.session.flashbag().get('status') %}
         <div class="alert alert-success">{{ message }} </div>
     {% endfor %}
-    
+
     {% for entry in entries %}
         <div class="col-lg-12">
-        	<p class="pull-left" ><img width="100" src="{{ asset('uploads/'~entry.image) }}"></p>
-        	<p><strong>{{ entry.title }}</strong></p>
-        	<p> {{ entry.category.name }} </p>
-        	<p>
-        		{% for et in entry.entryTag %}
-					{{ et.tag.name }}
-        		{% endfor %}
-        	</p>
-        	<div class="clearfix"></div>
-        	<hr>
+            <p class="pull-left" ><img width="100" src="{{ asset('uploads/'~entry.image) }}"></p>
+            <p><strong>{{ entry.title }}</strong></p>
+            <p> {{ entry.category.name }} </p>
+            <p>
+                {% for et in entry.entryTag %}
+                    {{ et.tag.name }}
+                {% endfor %}
+            </p>
+            <p>
+                <a href="{{ path("blog_delete_entry", {"id":entry.id}) }}" class="btn btn-danger">Eliminar</a>
+                
+            </p>
+            <div class="clearfix"></div>
+            <hr>
         </div>
-       <div class="clearfix"></div>
+        <div class="clearfix"></div>
     {% endfor %}
-        
-    
+
+
 {% endblock %}
