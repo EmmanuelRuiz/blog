@@ -1,53 +1,72 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="es">
     <head>
-        <meta charset="utf-8">
-        <title> {% block title %} Blog | CreaLab {% endblock %} </title>
-        <script src="{{ asset('assets/js/jquery.min.js')}}"></script>
-        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css')}}">
-        <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>        
+        <meta charset="utf-8" />
+        <title>
+            {% block title %} Crealab Blog {% endblock %}
+        </title>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     </head>
     <body>
         <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a  class="navbar-brand" href="{{path('blog_homepage')}}">CreaLab</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">                                  
-                        {% if app.user == null %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('login') }}">login</a>
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{path("blog_homepage")}}">Crealab</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            {% block menu %}
+                                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                                <li><a href="#">Link</a></li>
+                            {% endblock %}
+                        </ul>
+                        
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#">
+                                {% if app.user != null%}
+                                    Bienvenido, {{app.user.name}} {{app.user.surname}}
+                                {% endif%}
+                                </a>
                             </li>
-                        {% else %}
-                            <li class="nav-item">
-                                <p>Bienvenido {{app.user.name}} {{app.user.surname}} </p>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    {% if app.user == null%}
+                                        <li><a href="{{path("login")}}">Entrar</a></li>
+                                    {%else%}
+                                        <li><a href="{{path("blog_add_entry")}}">Añadir entrada</a></li>
+                                        <li><a href="{{path("blog_index_tag")}}">Etiquetas</a></li>
+                                        <li><a href="{{path("blog_index_category")}}">Categorías</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="{{path("logout")}}">Salir</a></li>
+                                    {% endif%}
+                                    <li><a href="#">Ayuda</a></li>
+                                </ul>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('blog_index_tag') }}">Etiquetas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('blog_index_category') }}">Categorias</a>
-                            </li>
-                           
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('logout') }}">Salir</a>
-                            </li>
-                           
-                        {% endif %}
-                
-                    </ul>
-                </div>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
             </nav>
         </header>
         <section id="content">
-            {% block content %} Contenido por defecto {% endblock %}
+            {% block content %} Content default {% endblock %}
         </section>
         <footer>
+            <hr>
             Crealab &copy;
         </footer>
-
     </body>
-
 </html>

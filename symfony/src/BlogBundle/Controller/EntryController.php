@@ -15,6 +15,16 @@ class EntryController extends Controller {
     public function __construct() {
         $this->session = new Session();
     }
+    
+    public function indexAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $entry_repo = $em->getRepository("BlogBundle:Entry");
+        
+        $entries = $entry_repo->findAll();
+        return $this->render("BlogBundle:Entry:index.html.twig",array(
+            "entries" => $entries
+        ));
+    }
 
     public function addAction(Request $request) {
         $entry = new Entry();
@@ -74,7 +84,7 @@ class EntryController extends Controller {
             }
             /* crear flag */
             $this->session->getFlashBag()->add("status", $status);
-            //return $this->redirectToRoute("blog_index_entry");
+            return $this->redirectToRoute("blog_homepage");
         }
         return $this->render("BlogBundle:Entry:add.html.twig", array(
                     "form" => $form->createView()
