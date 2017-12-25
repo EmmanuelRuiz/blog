@@ -1,4 +1,8 @@
 {% extends "BlogBundle::layout.html.twig" %}
+{% block menu %}
+   {% include "BlogBundle:Category:menu.categories.html.twig" with {'categories':categories} %} 
+{% endblock %}
+
 {% block content %}
     {% for message in app.session.flashbag().get('status') %}
         <div class="alert alert-success">{{ message }} </div>
