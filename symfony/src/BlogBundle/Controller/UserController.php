@@ -71,9 +71,6 @@ class UserController extends Controller {
             
         }
 
-
-
-
         return $this->render("BlogBundle:user:login.html.twig", array(
             "error" => $error,
             "last_username" => $lastUsername,
