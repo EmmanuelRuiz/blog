@@ -36,7 +36,9 @@ class EntryController extends Controller {
                     "entries" => $entries,
                     "categories" => $categories,
                     "totalItems" => $totalItems,
-                    "pagesCount" => $pagesCount
+                    "pagesCount" => $pagesCount,
+            "page" => $page,
+            "page_max" => $page
         ));
     }
 
