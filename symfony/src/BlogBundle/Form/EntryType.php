@@ -47,7 +47,8 @@ class EntryType extends AbstractType
                     "label" => "Imagen",
                     "attr" => array(
                         "class" => "form-control"
-                    )
+                    ),
+                    "data_class" => null
                 ))
 //                ->add('user')
                 //hacer consulta con las categorias que hay disponibles y 

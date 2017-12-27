@@ -77,12 +77,12 @@ class EntryController extends Controller {
                 );
 
                 if ($flush == null) {
-                    $status = "la categoria se ha creado correctamente";
+                    $status = "la entrada se ha creado correctamente";
                 } else {
-                    $status = "error al añadir la categoría";
+                    $status = "error al añadir la entrada";
                 }
             } else {
-                $status = "la categoría no se ha creado, el form no es valido";
+                $status = "la entrada no se ha creado, el form no es valido";
             }
             /* crear flag */
             $this->session->getFlashBag()->add("status", $status);
@@ -116,6 +116,63 @@ class EntryController extends Controller {
         }
 
         return $this->redirectToRoute("blog_homepage");
+    }
+
+    public function editAction(Request $request, $id) {
+        $em = $this->getDoctrine()->getManager();
+        $entry_repo = $em->getRepository("BlogBundle:Entry");
+        $category_repo = $em->getRepository("BlogBundle:Category");
+
+        $entry = $entry_repo->find($id);
+
+
+        /* generar el form */
+        $form = $this->createForm(EntryType::class, $entry);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /* set a la entrada */
+                $entry->setTitle($form->get("title")->getData());
+                $entry->setContent($form->get("content")->getData());
+                $entry->setStatus($form->get("status")->getData());
+
+                $file = $form["image"]->getData();
+                $ext = $file->guessExtension();
+                $file_name = time() . "." . $ext;
+                $file->move("uploads", $file_name);
+
+                $entry->setImage($file_name);
+                /* obtener y setear categoria */
+                $category = $category_repo->find($form->get("category")->getData());
+                $entry->setCategory($category);
+
+                $user = $this->getUser();
+                $entry->setUser($user);
+
+                $em->persist($entry);
+                $flush = $em->flush();
+
+                $entry_repo->saveEntryTags(
+                        $form->get("tags")->getData(), $form->get("title")->getData(), $category, $user
+                );
+                
+                if ($flush == null) {
+                    $status = "La entrada se ha editado correctamente";
+                } else {
+                    $status = "No se ha podido editar la entrada";
+                }
+            } else {
+                $status = "El formulario no es valido";
+            }
+            $this->session->getFlashBag()->add("status", $status);
+            return $this->redirectToRoute("blog_homepage");
+            
+        }
+        return  $this->render("BlogBundle:Entry:edit.html.twig", array(
+            "form" => $form->createView(),
+            "entry" => $entry
+        ));
     }
 
 }
