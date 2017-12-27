@@ -16,18 +16,27 @@ class EntryController extends Controller {
         $this->session = new Session();
     }
 
-    public function indexAction(Request $request) {
+    public function indexAction($page) {
         $em = $this->getDoctrine()->getManager();
         $entry_repo = $em->getRepository("BlogBundle:Entry");
 
         $category_repo = $em->getRepository("BlogBundle:Category");
 
-        $entries = $entry_repo->findAll();
         $categories = $category_repo->findAll();
+        $pageSize = 5;
+        $entries = $entry_repo->getPaginateEntries($pageSize, $page);
+
+        /* mostrar links */
+        $totalItems = count($entries);
+        //redondear el resultado de totalitems entre pagesize
+        $pagesCount = ceil($totalItems / $pageSize);
+
 
         return $this->render("BlogBundle:Entry:index.html.twig", array(
                     "entries" => $entries,
-                    "categories" => $categories
+                    "categories" => $categories,
+                    "totalItems" => $totalItems,
+                    "pagesCount" => $pagesCount
         ));
     }
 
@@ -124,7 +133,12 @@ class EntryController extends Controller {
         $category_repo = $em->getRepository("BlogBundle:Category");
 
         $entry = $entry_repo->find($id);
+        /* bucle para sacar las etiqetas en el form de editar */
 
+        $tags = "";
+        foreach ($entry->getEntryTag() as $entryTag) {
+            $tags .= $entryTag->getTag()->getName() . ",";
+        }
 
         /* generar el form */
         $form = $this->createForm(EntryType::class, $entry);
@@ -153,10 +167,21 @@ class EntryController extends Controller {
                 $em->persist($entry);
                 $flush = $em->flush();
 
+                /* borrar etiquetas cuando se edita la entrada */
+                $entry_tag_repo = $em->getRepository("BlogBundle:EntryTag");
+                $entry_tags = $entry_tag_repo->findBy(array("entry" => $entry));
+                foreach ($entry_tags as $et) {
+                    if (is_object($et)) {
+                        $em->remove($et);
+                        $em->flush();
+                    }
+                }
+                /* fin */
+
                 $entry_repo->saveEntryTags(
                         $form->get("tags")->getData(), $form->get("title")->getData(), $category, $user
                 );
-                
+
                 if ($flush == null) {
                     $status = "La entrada se ha editado correctamente";
                 } else {
@@ -167,11 +192,11 @@ class EntryController extends Controller {
             }
             $this->session->getFlashBag()->add("status", $status);
             return $this->redirectToRoute("blog_homepage");
-            
         }
-        return  $this->render("BlogBundle:Entry:edit.html.twig", array(
-            "form" => $form->createView(),
-            "entry" => $entry
+        return $this->render("BlogBundle:Entry:edit.html.twig", array(
+                    "form" => $form->createView(),
+                    "entry" => $entry,
+                    "tags" => $tags
         ));
     }
 
