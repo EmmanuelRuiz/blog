@@ -1,8 +1,7 @@
 {# empty Twig template #}
 <!-- partial
     mostrar menu de categorías en cualquier vista
-
 -->
 {% for category in categories %}
-    <li><a href="#">{{ category.name }}</a></li>
+    <li><a href="{{path('blog_read_category', {"id":category.id})}}">{{ category.name }}</a></li>
 {% endfor %}

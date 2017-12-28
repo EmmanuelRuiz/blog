@@ -75,4 +75,21 @@ class EntryRepository extends \Doctrine\ORM\EntityRepository {
         
         return $paginator;
     }
+    
+    /*paginar el listado de entraadas*/
+    public function getCategoryEntries($category, $pagesSize=5, $currentPage=1){
+        $em = $this->getEntityManager();
+        $dql = "SELECT e FROM BlogBundle\Entity\Entry e "
+                . " WHERE e.category = :category ORDER BY e.id DESC";
+        $query = $em->createQuery($dql)
+                ->setParameter("category", $category)
+                ->setFirstResult($pagesSize*($currentPage-1))
+                ->setMaxResults($pagesSize)
+                ;
+        $paginator = new Paginator($query, $fetchJoinCollection = true);
+        
+        return $paginator;
+        
+    }
+
 }

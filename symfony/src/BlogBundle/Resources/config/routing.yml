@@ -40,6 +40,10 @@ blog_edit_category:
     path: /categories/edit/{id}
     defaults: { _controller: BlogBundle:Category:edit }
 
+blog_read_category:
+    path: /category/{id}/{page}
+    defaults: { _controller: BlogBundle:Category:category, page:1 }
+
 blog_add_entry:
     path: /entries/add
     defaults: { _controller: BlogBundle:Entry:add }

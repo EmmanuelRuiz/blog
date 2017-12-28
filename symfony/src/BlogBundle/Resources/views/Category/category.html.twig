@@ -1,0 +1,55 @@
+{% extends "BlogBundle::layout.html.twig" %}
+
+{% block menu %}
+    {% include "BlogBundle:Category:menu.categories.html.twig" with {'categories': categories} %}
+{% endblock %}
+
+
+{% block content %}
+    {% for entry in entries %}
+        <div class="col-lg-12">
+            <p class="pull-left" ><img width="100" src="{{ asset('uploads/'~entry.image) }}"></p>
+            <p><strong>{{ entry.title }}</strong></p>
+            <p> {{ entry.category.name }} </p>
+            <p> {{ entry.user.name }} </p>
+            <p>
+                {% for et in entry.entryTag %}
+                    {{ et.tag.name }}
+                {% endfor %}
+            </p>
+
+
+            {% if (app.user.id is defined) and (entry.user.id == app.user.id) %}
+                <p>
+                    <a href="{{ path("blog_edit_entry", {"id":entry.id}) }}" class="btn btn-warning">Editar</a>                
+                </p>
+                <p>
+                    <a href="{{ path("blog_delete_entry", {"id":entry.id}) }}" class="btn btn-danger">Eliminar</a>                
+                </p>            
+            {% endif %}
+            <div class="clearfix"></div>
+            <hr>
+        </div>
+        <div class="clearfix"></div>
+    {% endfor %}
+    <ul class="pagination">
+        {% if(page==1) %}
+
+        {% else %}
+            {% set page = page-1 %}
+        {% endif %}
+
+
+        <li><a href="{{ path('blog_read_category', {"id":category.id, "page":page}) }}">&laquo;</a></li>
+            {% for i in 1..pagesCount %}
+                <li><a href="{{ path('blog_read_category', {"id":category.id, "page":i}) }}">{{i}}</a></li>
+            {% endfor %}
+            {{pagesCount}}
+            {% if(page_max ==pagesCount) %}
+
+            {% else %}
+                {% set page_max = page_max+1 %}
+            {% endif %}
+        <li><a href="{{ path('blog_read_category', {"id":category.id, "page":page_max}) }}">&raquo;</a></li>
+    </ul>
+{% endblock %}
