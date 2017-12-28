@@ -9,7 +9,7 @@ logout:
     path: /logout
 
 blog_homepage:
-    path:     /{page}
+    path:     /home/{page}
     defaults: { _controller: BlogBundle:Entry:index, page:1 }
 
 blog_add_tag:

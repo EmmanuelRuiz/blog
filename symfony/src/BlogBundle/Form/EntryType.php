@@ -48,7 +48,8 @@ class EntryType extends AbstractType
                     "attr" => array(
                         "class" => "form-control"
                     ),
-                    "data_class" => null
+                    "data_class" => null,
+                    "required" => false
                 ))
 //                ->add('user')
                 //hacer consulta con las categorias que hay disponibles y 
