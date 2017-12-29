@@ -65,11 +65,11 @@ class TagController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $tag_repo = $em->getRepository("BlogBundle:Tag");
         $tag = $tag_repo->find($id);
-        
+
         //si la etiqueta no está en uso se elimina
         if (count($tag->getEntryTag()) == 0) {
             $em->remove($tag);
-            $em->flush();  
+            $em->flush();
         }
         return $this->redirectToRoute("blog_index_tag");
     }

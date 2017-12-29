@@ -4,11 +4,11 @@
     <div class="col-lg-6">
         <h2>Editar entrada: {{ entry.title }}</h2>
         {{ form_start(form, { 'enctype':'multipart/form-data' }) }}
-            Imagen: <img width="200" src="{{ asset("uploads/"~entry.image) }}">
-            {{ form_widget(form.image) }}
-            <label>etiquetas</label>
-            {% set tags_clean = tags|trim(",") %}
-            {{ form_widget(form.tags, {'value':tags_clean}) }}
+        Imagen: <img width="200" src="{{ asset("uploads/"~entry.image) }}">
+        {{ form_widget(form.image) }}
+        <label>etiquetas</label>
+        {% set tags_clean = tags|trim(",") %}
+        {{ form_widget(form.tags, {'value':tags_clean}) }}
         {{ form_end(form) }}
     </div>
     <div class="clearfix"></div>

@@ -11,13 +11,12 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class TagType extends AbstractType
-{
+class TagType extends AbstractType {
+
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
+    public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
                 ->add('name', TextType::class, array(
                     "label" => "Nombre:",
@@ -32,20 +31,19 @@ class TagType extends AbstractType
                     "attr" => array(
                         "class" => "form-name form-control"
                     )
-                ))        
+                ))
                 ->add('Guardar', SubmitType::class, array(
                     "attr" => array(
                         "class" => "form-submit btn btn-success"
                     )
                 ))
-                ;
+        ;
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
-    {
+    public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'BlogBundle\Entity\Tag'
         ));
@@ -54,10 +52,8 @@ class TagType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
-    {
+    public function getBlockPrefix() {
         return 'blogbundle_tag';
     }
-
 
 }

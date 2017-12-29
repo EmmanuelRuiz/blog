@@ -150,7 +150,7 @@ class EntryController extends Controller {
         /* generar el form */
         $form = $this->createForm(EntryType::class, $entry);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 /* set a la entrada */
@@ -167,6 +167,8 @@ class EntryController extends Controller {
                 } else {
                     $entry->setImage($entry_image);
                 }
+
+
 
                 /* obtener y setear categoria */
                 $category = $category_repo->find($form->get("category")->getData());

@@ -26,15 +26,15 @@ class UserController extends Controller {
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         $status_error = null;
-            $status = null;
+        $status = null;
         if ($form->isSubmitted()) {
-            
+
             if ($form->isValid()) {
                 //validar que no se repita el usuario
                 $em = $this->getDoctrine()->getManager();
                 $user_repo = $em->getRepository("BlogBundle:User");
                 //buscar usuario en bd con datos del form
-                $user = $user_repo->findOneBy(array("email"=>$form->get("email")->getData()));
+                $user = $user_repo->findOneBy(array("email" => $form->get("email")->getData()));
                 if (count($user) == 0) {
                     $user = new User();
                     $user->setName($form->get("name")->getData());
@@ -63,20 +63,19 @@ class UserController extends Controller {
             } else {
                 $status_error = "No se pudo registrar el usuario";
             }
-            if($status != null){
+            if ($status != null) {
                 $this->session->getFlashBag()->add("status", $status);
             } else if ($status_error != null) {
                 $this->session->getFlashBag()->add("status", $status_error);
             }
-            
         }
 
         return $this->render("BlogBundle:user:login.html.twig", array(
-            "error" => $error,
-            "last_username" => $lastUsername,
-            "form" => $form->createView(),
-            "status" => $status,
-            "status_error" => $status_error
+                    "error" => $error,
+                    "last_username" => $lastUsername,
+                    "form" => $form->createView(),
+                    "status" => $status,
+                    "status_error" => $status_error
         ));
     }
 
